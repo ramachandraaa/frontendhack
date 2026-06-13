@@ -1,0 +1,1 @@
+export { HRProfilePage } from './HRProfilePage'
