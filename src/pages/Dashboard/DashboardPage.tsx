@@ -1,7 +1,6 @@
 import Grid from '@mui/material/Grid2'
 import BusinessIcon from '@mui/icons-material/Business'
 import GroupsIcon from '@mui/icons-material/Groups'
-import UpdateIcon from '@mui/icons-material/Update'
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive'
 import { ErrorAlert, PageHeader, StatCard, CardGridSkeleton } from '@/components'
 import { useDashboard } from '@/hooks'
@@ -19,19 +18,13 @@ export function DashboardPage() {
     },
     {
       title: 'Total HR Contacts',
-      value: data?.totalHrContacts ?? 0,
+      value: data?.totalHrs ?? 0,
       icon: <GroupsIcon />,
       color: '#7c3aed',
     },
     {
-      title: 'Total Updates',
-      value: data?.totalUpdates ?? 0,
-      icon: <UpdateIcon />,
-      color: '#16a34a',
-    },
-    {
       title: "Today's Reminders",
-      value: data?.todaysReminders ?? 0,
+      value: data?.todaysReminders?.length ?? 0,
       icon: <NotificationsActiveIcon />,
       color: '#d97706',
     },

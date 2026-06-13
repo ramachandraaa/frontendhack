@@ -21,6 +21,13 @@ export function formatTime(value?: string | null): string {
   return parsed.isValid() ? parsed.format('h:mm A') : value
 }
 
+export function formatReminderTime(value?: { hour?: number; minute?: number } | null): string {
+  if (!value) return '—'
+  const h = value.hour ?? 0
+  const m = value.minute ?? 0
+  return dayjs().hour(h).minute(m).format('h:mm A')
+}
+
 export function formatRelative(value?: string | null): string {
   if (!value) return '—'
   const parsed = dayjs(value)

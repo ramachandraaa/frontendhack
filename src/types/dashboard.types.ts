@@ -1,6 +1,7 @@
+import type { Reminder } from './reminder.types'
+
 export interface DashboardStats {
   totalCompanies: number
-  totalHrContacts: number
-  totalUpdates: number
-  todaysReminders: number
+  totalHrs: number
+  todaysReminders: Reminder[]
 }

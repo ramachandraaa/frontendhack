@@ -31,9 +31,6 @@ export function HrContactCard({ contact, onOpen, onEdit, onDelete }: HrContactCa
                 <Typography variant="subtitle1" fontWeight={600}>
                   {contact.hrName}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {contact.designation || 'No designation'}
-                </Typography>
                 <Typography variant="body2" mt={0.5}>
                   {contact.email || '—'}
                 </Typography>

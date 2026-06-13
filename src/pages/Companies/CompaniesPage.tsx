@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button, Card, TextField, InputAdornment } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add'
 import SearchIcon from '@mui/icons-material/Search'
@@ -26,9 +27,11 @@ import {
   useUpdateCompany,
 } from '@/hooks'
 import { getErrorMessage } from '@/utils/api'
+import { companyDetailsPath } from '@/routes/paths'
 import type { Company, CompanyRequest } from '@/types'
 
 export function CompaniesPage() {
+  const navigate = useNavigate()
   const [search, setSearch] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingCompany, setEditingCompany] = useState<Company | null>(null)
@@ -86,18 +89,33 @@ export function CompaniesPage() {
   }
 
   const columns: GridColDef<Company>[] = [
-    { field: 'companyName', headerName: 'Company Name', flex: 1, minWidth: 180 },
+    {
+      field: 'companyName',
+      headerName: 'Company Name',
+      flex: 1,
+      minWidth: 180,
+      renderCell: (params) => (
+        <span
+          style={{ cursor: 'pointer', color: 'inherit', textDecoration: 'underline', textDecorationColor: 'transparent' }}
+          onMouseEnter={(e) => (e.currentTarget.style.textDecorationColor = 'currentColor')}
+          onMouseLeave={(e) => (e.currentTarget.style.textDecorationColor = 'transparent')}
+        >
+          {params.value}
+        </span>
+      ),
+    },
     {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 100,
+      width: 120,
       getActions: (params) => [
         <GridActionsCellItem
           key="edit"
           icon={<EditIcon />}
           label="Edit"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation()
             setEditingCompany(params.row)
             setDialogOpen(true)
           }}
@@ -106,7 +124,10 @@ export function CompaniesPage() {
           key="delete"
           icon={<DeleteIcon />}
           label="Delete"
-          onClick={() => setDeleteTarget(params.row)}
+          onClick={(e) => {
+            e.stopPropagation()
+            setDeleteTarget(params.row)
+          }}
         />,
       ],
     },
@@ -169,6 +190,8 @@ export function CompaniesPage() {
             pageSizeOptions={[10, 25, 50]}
             initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
             disableRowSelectionOnClick
+            onRowClick={(params) => navigate(companyDetailsPath(params.row.id))}
+            sx={{ '& .MuiDataGrid-row': { cursor: 'pointer' } }}
           />
         </Card>
       )}

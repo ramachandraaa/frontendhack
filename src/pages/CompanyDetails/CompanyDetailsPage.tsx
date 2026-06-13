@@ -4,8 +4,6 @@ import {
   Box,
   Breadcrumbs,
   Button,
-  Card,
-  CardContent,
   Link,
   Typography,
 } from '@mui/material'
@@ -44,7 +42,7 @@ export function CompanyDetailsPage() {
   const [editingContact, setEditingContact] = useState<HrContact | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<HrContact | null>(null)
 
-  const { data: company, isLoading: companyLoading, isError, error } = useCompany(companyId)
+  const { data: company, isError, error } = useCompany(companyId)
   const { data: contacts = [], isLoading: contactsLoading } = useHrContactsByCompany(companyId)
   const createContact = useCreateHrContact(companyId)
   const updateContact = useUpdateHrContact()
@@ -95,38 +93,19 @@ export function CompanyDetailsPage() {
           Companies
         </Link>
         <Typography variant="body2" color="text.primary">
-          {company?.name ?? 'Company'}
+          {company?.companyName ?? 'Company'}
         </Typography>
       </Breadcrumbs>
 
       <PageHeader
-        title={company?.name ?? 'Company Details'}
-        subtitle="Company information and HR contacts"
+        title={company?.companyName ?? 'Company Details'}
+        subtitle="HR contacts for this company"
         action={
           <Button startIcon={<ArrowBackIcon />} onClick={() => navigate(ROUTES.COMPANIES)}>
             Back
           </Button>
         }
       />
-
-      {companyLoading ? (
-        <CardGridSkeleton count={1} />
-      ) : (
-        <Card sx={{ mb: 3 }}>
-          <CardContent>
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12, md: 4 }}>
-                <Typography variant="caption" color="text.secondary">Address</Typography>
-                <Typography>{company?.address || '—'}</Typography>
-              </Grid>
-              <Grid size={{ xs: 12, md: 4 }}>
-                <Typography variant="caption" color="text.secondary">Website</Typography>
-                <Typography>{company?.website || '—'}</Typography>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      )}
 
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h6">HR Contacts</Typography>

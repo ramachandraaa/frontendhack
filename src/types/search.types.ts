@@ -16,9 +16,7 @@ export interface SearchResult {
 export interface SearchResponse {
   companies?: Array<{
     id: number
-    name: string
-    address?: string
-    website?: string
+    companyName: string
   }>
   hrContacts?: Array<{
     id: number
@@ -27,7 +25,6 @@ export interface SearchResponse {
     hrName: string
     email?: string
     mobile?: string
-    designation?: string
   }>
   results?: SearchResult[]
 }
