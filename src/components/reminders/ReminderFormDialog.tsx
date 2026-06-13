@@ -9,7 +9,15 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material'
-import type { Reminder, ReminderRequest } from '@/types'
+import type { Reminder, ReminderRequest, ReminderTime } from '@/types'
+
+interface FormValues {
+  hrName: string
+  reminderDate: string
+  reminderTimeStr: string
+  reminderNote: string
+  hrContactId?: number
+}
 
 interface ReminderFormDialogProps {
   open: boolean
@@ -17,6 +25,19 @@ interface ReminderFormDialogProps {
   loading?: boolean
   onClose: () => void
   onSubmit: (payload: ReminderRequest) => void
+}
+
+function timeObjToStr(t?: ReminderTime | null): string {
+  if (!t) return ''
+  const h = String(t.hour).padStart(2, '0')
+  const m = String(t.minute).padStart(2, '0')
+  return `${h}:${m}`
+}
+
+function strToTimeObj(s: string): ReminderTime | undefined {
+  if (!s) return undefined
+  const [h, m] = s.split(':').map(Number)
+  return { hour: h, minute: m, second: 0, nano: 0 }
 }
 
 export function ReminderFormDialog({
@@ -31,33 +52,35 @@ export function ReminderFormDialog({
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<ReminderRequest>()
+  } = useForm<FormValues>()
 
   useEffect(() => {
     if (open) {
       reset({
-        companyName: reminder?.companyName ?? '',
         hrName: reminder?.hrName ?? '',
         reminderDate: reminder?.reminderDate?.slice(0, 10) ?? '',
-        reminderTime: reminder?.reminderTime ?? '',
+        reminderTimeStr: timeObjToStr(reminder?.reminderTime),
         reminderNote: reminder?.reminderNote ?? '',
-        companyId: reminder?.companyId,
         hrContactId: reminder?.hrContactId,
       })
     }
   }, [open, reminder, reset])
 
+  const handleFormSubmit = (values: FormValues) => {
+    onSubmit({
+      hrContactId: values.hrContactId,
+      hrName: values.hrName,
+      reminderDate: values.reminderDate,
+      reminderTime: strToTimeObj(values.reminderTimeStr),
+      reminderNote: values.reminderNote,
+    })
+  }
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{reminder ? 'Edit Reminder' : 'Add Reminder'}</DialogTitle>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+      <Box component="form" onSubmit={handleSubmit(handleFormSubmit)}>
         <DialogContent>
-          <TextField
-            label="Company"
-            fullWidth
-            margin="normal"
-            {...register('companyName')}
-          />
           <TextField label="HR Name" fullWidth margin="normal" {...register('hrName')} />
           <TextField
             label="Reminder Date"
@@ -75,7 +98,7 @@ export function ReminderFormDialog({
             fullWidth
             margin="normal"
             InputLabelProps={{ shrink: true }}
-            {...register('reminderTime')}
+            {...register('reminderTimeStr')}
           />
           <TextField
             label="Reminder Note"

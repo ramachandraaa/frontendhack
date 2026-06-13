@@ -38,11 +38,9 @@ export function HrContactFormDialog({
     if (open) {
       reset({
         hrName: contact?.hrName ?? '',
-        designation: contact?.designation ?? '',
         email: contact?.email ?? '',
         mobile: contact?.mobile ?? '',
-        alternateMobile: contact?.alternateMobile ?? '',
-        linkedIn: contact?.linkedIn ?? '',
+        linkedin: contact?.linkedin ?? '',
       })
     }
   }, [open, contact, reset])
@@ -60,7 +58,6 @@ export function HrContactFormDialog({
             helperText={errors.hrName?.message}
             {...register('hrName', { required: validationMessages.required })}
           />
-          <TextField label="Designation" fullWidth margin="normal" {...register('designation')} />
           <TextField
             label="Email"
             fullWidth
@@ -81,8 +78,7 @@ export function HrContactFormDialog({
               pattern: { value: phonePattern, message: validationMessages.phone },
             })}
           />
-          <TextField label="Alternate Mobile" fullWidth margin="normal" {...register('alternateMobile')} />
-          <TextField label="LinkedIn" fullWidth margin="normal" {...register('linkedIn')} />
+          <TextField label="LinkedIn" fullWidth margin="normal" {...register('linkedin')} />
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button onClick={onClose}>Cancel</Button>

@@ -1,22 +1,25 @@
+export interface ReminderTime {
+  hour: number
+  minute: number
+  second: number
+  nano: number
+}
+
 export interface Reminder {
   id: number
-  companyId?: number
   hrContactId?: number
-  companyName?: string
   hrName?: string
   reminderDate: string
-  reminderTime?: string
+  reminderTime?: ReminderTime
   reminderNote?: string
-  createdAt?: string
-  updatedAt?: string
+  createdByUserId?: number
+  createdByName?: string
 }
 
 export interface ReminderRequest {
-  companyId?: number
   hrContactId?: number
-  companyName?: string
   hrName?: string
   reminderDate: string
-  reminderTime?: string
+  reminderTime?: ReminderTime
   reminderNote?: string
 }

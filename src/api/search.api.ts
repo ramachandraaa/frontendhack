@@ -8,10 +8,10 @@ function normalizeSearchResults(response: SearchResponse): SearchResult[] {
   const companyResults: SearchResult[] = (response.companies ?? []).map((company) => ({
     id: company.id,
     type: 'company' as const,
-    label: company.name,
-    subtitle: company.address ?? company.website,
+    label: company.companyName,
+    subtitle: undefined,
     companyId: company.id,
-    companyName: company.name,
+    companyName: company.companyName,
   }))
 
   const hrResults: SearchResult[] = (response.hrContacts ?? []).map((hr) => ({

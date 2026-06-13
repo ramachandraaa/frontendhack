@@ -3,20 +3,14 @@ export interface HrContact {
   companyId: number
   companyName?: string
   hrName: string
-  designation?: string
   email?: string
   mobile?: string
-  alternateMobile?: string
-  linkedIn?: string
-  createdAt?: string
-  updatedAt?: string
+  linkedin?: string
 }
 
 export interface HrContactRequest {
   hrName: string
-  designation?: string
   email?: string
   mobile?: string
-  alternateMobile?: string
-  linkedIn?: string
+  linkedin?: string
 }

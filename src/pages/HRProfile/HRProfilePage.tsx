@@ -81,7 +81,6 @@ export function HRProfilePage() {
 
       <PageHeader
         title={contact?.hrName ?? 'HR Profile'}
-        subtitle={contact?.designation}
         action={
           contact?.companyId ? (
             <Button
@@ -104,21 +103,17 @@ export function HRProfilePage() {
         <Card sx={{ mb: 3 }}>
           <CardContent>
             <Grid container spacing={2}>
-              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                 <Typography variant="caption" color="text.secondary">Email</Typography>
                 <Typography>{contact?.email || '—'}</Typography>
               </Grid>
-              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                 <Typography variant="caption" color="text.secondary">Mobile</Typography>
                 <Typography>{contact?.mobile || '—'}</Typography>
               </Grid>
-              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                <Typography variant="caption" color="text.secondary">Alternate Mobile</Typography>
-                <Typography>{contact?.alternateMobile || '—'}</Typography>
-              </Grid>
-              <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                 <Typography variant="caption" color="text.secondary">LinkedIn</Typography>
-                <Typography>{contact?.linkedIn || '—'}</Typography>
+                <Typography>{contact?.linkedin || '—'}</Typography>
               </Grid>
             </Grid>
           </CardContent>
@@ -165,9 +160,9 @@ export function HRProfilePage() {
         <TimelineFeed
           items={updates.map((update) => ({
             id: update.id,
-            title: update.addedBy ?? 'Team member',
-            subtitle: formatDateTime(update.createdAt),
-            timestamp: update.createdAt,
+            title: update.createdByName ?? 'Team member',
+            subtitle: update.timestamp ? formatDateTime(new Date(update.timestamp).toISOString()) : undefined,
+            timestamp: update.timestamp ? new Date(update.timestamp).toISOString() : '',
             content: update.updateText,
           }))}
         />

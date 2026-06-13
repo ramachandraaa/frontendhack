@@ -2,15 +2,21 @@ import { apiClient } from './client'
 import { unwrapData } from '@/utils/api'
 import type { DashboardStats } from '@/types'
 
+export interface DashboardResponse {
+  totalCompanies: number
+  totalHrContacts: number
+  totalHrs: number
+  todaysReminders: DashboardStats['todaysReminders']
+}
+
 export const dashboardApi = {
   getStats: async (): Promise<DashboardStats> => {
     const { data } = await apiClient.get('/dashboard')
-    const stats = unwrapData<DashboardStats>(data)
+    const raw = unwrapData<DashboardResponse>(data)
     return {
-      totalCompanies: stats.totalCompanies ?? 0,
-      totalHrContacts: stats.totalHrContacts ?? 0,
-      totalUpdates: stats.totalUpdates ?? 0,
-      todaysReminders: stats.todaysReminders ?? 0,
+      totalCompanies: raw.totalCompanies ?? 0,
+      totalHrs: raw.totalHrs ?? raw.totalHrContacts ?? 0,
+      todaysReminders: Array.isArray(raw.todaysReminders) ? raw.todaysReminders : [],
     }
   },
 }

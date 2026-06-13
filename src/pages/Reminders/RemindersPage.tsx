@@ -18,7 +18,7 @@ import {
 import { ReminderFormDialog } from '@/components/reminders/ReminderFormDialog'
 import { useCreateReminder, useReminders, useUpdateReminder } from '@/hooks'
 import { getErrorMessage } from '@/utils/api'
-import { formatDate, formatTime } from '@/utils/date'
+import { formatDate, formatReminderTime } from '@/utils/date'
 import type { Reminder, ReminderRequest } from '@/types'
 
 export function RemindersPage() {
@@ -57,7 +57,6 @@ export function RemindersPage() {
 
   const columns: GridColDef<Reminder>[] = useMemo(
     () => [
-      { field: 'companyName', headerName: 'Company', flex: 1, minWidth: 150 },
       { field: 'hrName', headerName: 'HR Name', flex: 1, minWidth: 140 },
       {
         field: 'reminderDate',
@@ -69,9 +68,10 @@ export function RemindersPage() {
         field: 'reminderTime',
         headerName: 'Reminder Time',
         width: 130,
-        valueFormatter: (value) => formatTime(value ? String(value) : undefined),
+        valueFormatter: (value) => formatReminderTime(value as { hour: number; minute: number } | null),
       },
       { field: 'reminderNote', headerName: 'Reminder Note', flex: 1.2, minWidth: 180 },
+      { field: 'createdByName', headerName: 'Created By', width: 140 },
       {
         field: 'actions',
         type: 'actions',

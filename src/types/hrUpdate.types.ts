@@ -5,8 +5,9 @@ export interface HrUpdate {
   hrName?: string
   companyName?: string
   updateText: string
-  addedBy?: string
-  createdAt: string
+  createdByUserId?: number
+  createdByName?: string
+  timestamp?: number
 }
 
 export interface HrUpdateRequest {
