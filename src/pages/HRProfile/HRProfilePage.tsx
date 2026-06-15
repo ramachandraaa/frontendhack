@@ -13,11 +13,13 @@ import {
 import Grid from '@mui/material/Grid2'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import SendIcon from '@mui/icons-material/Send'
+import ScheduleIcon from '@mui/icons-material/Schedule'
 import { useForm } from 'react-hook-form'
 import { useSnackbar } from 'notistack'
 import {
   EmptyState,
   ErrorAlert,
+  FollowUpModal,
   PageHeader,
   TimelineFeed,
   TimelineSkeleton,
@@ -37,9 +39,10 @@ export function HRProfilePage() {
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   const [submitting, setSubmitting] = useState(false)
+  const [openFollowUp, setOpenFollowUp] = useState(false)
 
   const { data: contact, isLoading: contactLoading, isError, error } = useHrContact(contactId)
-  const { data: updates = [], isLoading: updatesLoading } = useHrUpdatesByContact(contactId)
+  const { data: updates = [], isLoading: updatesLoading, refetch: refetchUpdates } = useHrUpdatesByContact(contactId)
   const createUpdate = useCreateHrUpdate(contactId)
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<UpdateForm>()
@@ -52,6 +55,7 @@ export function HRProfilePage() {
         onSuccess: () => {
           enqueueSnackbar('Update added', { variant: 'success' })
           reset()
+          refetchUpdates()
         },
         onError: (err) => enqueueSnackbar(getErrorMessage(err), { variant: 'error' }),
         onSettled: () => setSubmitting(false),
@@ -82,14 +86,23 @@ export function HRProfilePage() {
       <PageHeader
         title={contact?.hrName ?? 'HR Profile'}
         action={
-          contact?.companyId ? (
+          <Box>
             <Button
-              startIcon={<ArrowBackIcon />}
-              onClick={() => navigate(companyDetailsPath(contact.companyId))}
+              startIcon={<ScheduleIcon />}
+              onClick={() => setOpenFollowUp(true)}
+              sx={{ mr: 1 }}
             >
-              Back to Company
+              Schedule Follow-Up
             </Button>
-          ) : undefined
+            {contact?.companyId && (
+              <Button
+                startIcon={<ArrowBackIcon />}
+                onClick={() => navigate(companyDetailsPath(contact.companyId))}
+              >
+                Back to Company
+              </Button>
+            )}
+          </Box>
         }
       />
 
@@ -167,6 +180,13 @@ export function HRProfilePage() {
           }))}
         />
       )}
+
+      <FollowUpModal
+        open={openFollowUp}
+        onClose={() => setOpenFollowUp(false)}
+        hrContactId={contactId}
+        onSuccess={() => refetchUpdates()}
+      />
     </>
   )
 }

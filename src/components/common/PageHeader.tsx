@@ -1,5 +1,6 @@
 import { Box, Typography, type SxProps, type Theme } from '@mui/material'
 import type { ReactNode } from 'react'
+import { InstallPWAButton } from './InstallPWAButton'
 
 interface PageHeaderProps {
   title: string
@@ -29,7 +30,10 @@ export function PageHeader({ title, subtitle, action, sx }: PageHeaderProps) {
           </Typography>
         )}
       </Box>
-      {action}
+      <Box display="flex" gap={2} alignItems="center">
+        <InstallPWAButton />
+        {action}
+      </Box>
     </Box>
   )
 }

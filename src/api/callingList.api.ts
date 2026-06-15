@@ -7,4 +7,8 @@ export const callingListApi = {
     const { data } = await apiClient.get('/calling-list/today')
     return unwrapList<CallingListItem>(data)
   },
+
+  delete: async (reminderId: number): Promise<void> => {
+    await apiClient.delete(`/calling-list/${reminderId}`)
+  },
 }

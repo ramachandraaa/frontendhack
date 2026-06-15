@@ -22,4 +22,8 @@ export const remindersApi = {
     const { data } = await apiClient.put(`/reminders/${id}`, payload)
     return unwrapData<Reminder>(data)
   },
+
+  delete: async (id: number): Promise<void> => {
+    await apiClient.delete(`/reminders/${id}`)
+  },
 }

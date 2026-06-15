@@ -1,6 +1,6 @@
 import { apiClient } from './client'
 import { unwrapData, unwrapList } from '@/utils/api'
-import type { HrContact, HrContactRequest } from '@/types'
+import type { HrContact, HrContactRequest, FollowUpRequest, FollowUpResponse } from '@/types'
 
 export const hrContactsApi = {
   getAll: async (): Promise<HrContact[]> => {
@@ -30,5 +30,10 @@ export const hrContactsApi = {
 
   delete: async (id: number): Promise<void> => {
     await apiClient.delete(`/hr-contacts/${id}`)
+  },
+
+  addFollowUp: async (hrContactId: number, payload: FollowUpRequest): Promise<FollowUpResponse> => {
+    const { data } = await apiClient.post(`/hr-contacts/${hrContactId}/updates`, payload)
+    return unwrapData<FollowUpResponse>(data)
   },
 }
